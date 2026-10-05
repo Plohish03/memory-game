@@ -84,7 +84,7 @@ function renderBoard(){
                 pairs++;
                 pairsEl.textContent = 'Пары: ' + pairs + ' из 8';
                 if(pairs ===8){
-                    console.log('Победа! Ходов: ' + moves);
+                    showWinModal();
                 }
 
             } else {
@@ -169,7 +169,7 @@ function closeModal(){
     if (overlay === null) { 
         return; 
     }
-    
+
     overlay.remove();
     overlay = null;
     document.body.style.overflow = '';  
@@ -186,5 +186,24 @@ leaderboardBtn.addEventListener('click', function () {
     content.append(closeBtn);
     openModal(content);
 });
+
+function showWinModal(){
+    const content = createEl('div', 'content', '');
+    const closeBtn = createEl('button', '', 'Закрыть');
+    const winNewGameBtn = createEl('button', '', 'Новая игра!');
+    closeBtn.addEventListener('click', function () {
+        closeModal();
+    });
+    winNewGameBtn.addEventListener('click', function () {
+        closeModal();
+        startNewGame();
+    });
+
+    content.append(createEl('h1', '', 'Победа!'));
+    content.append(createEl('span', '', 'Ходов: ' + moves));
+    content.append(winNewGameBtn);
+    content.append(closeBtn);
+    openModal(content);
+}
 
 startNewGame();
