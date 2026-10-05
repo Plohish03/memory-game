@@ -30,12 +30,17 @@ app.append(stats);
 app.append(board);
 document.body.append(app);
 
-const symbols = ['🍎','🍌','🍇','🍒','🍉','🍍','🥥','🥝'];
+const symbols = ['circle','square','triangle','star','heart','diamond','moon','cross'];
+symbols.forEach(function (name) {
+    new Image().src = 'images/' + name + '.svg';
+});
 const cards = Array.from({ length: 16 }, (_, index) => ({
   id: index + 1,
   symbol: symbols[index % symbols.length],
   isOpen: false
 }));
+
+
 
 function shuffle(arr){
     for(let i= arr.length-1; i > 0; i--){
@@ -68,7 +73,11 @@ function renderBoard(){
                 return;
             }
             card.isOpen = true;
-            el.textContent = card.symbol;
+            
+            const img = createEl('img');
+            img.src = 'images/' + card.symbol + '.svg';
+            img.alt = card.symbol;
+            el.append(img);
             el.classList.add('open');
 
             if (firstCard === null){

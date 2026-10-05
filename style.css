@@ -60,21 +60,6 @@ body {
     gap: 10px;
     height: auto;
 }
-.card{
-    height: 100px;
-    background: var(--primary);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    cursor: pointer;
-}
-
-.card.open {
-    background: var(--accent);
-}
-
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -99,5 +84,56 @@ body {
 .leaderboard th, .leaderboard td {
     padding: 6px 14px;
     text-align: center;
+    border-bottom: 1px solid var(--shadow-dark);
+}
+.card {
+    height: 100px;
+    padding: 8px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+.card.open { background: #ffffff; }
+.card.matched { background: #a5d6a7; }
+
+.app-header button,
+.content button { cursor: pointer; }
+
+.modal-overlay { z-index: 100; }
+.modal {
+    padding: 24px;
+    min-width: 280px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    text-align: center;
+}
+.content h1,
+.content h2 { margin-bottom: 12px; }
+.content span,
+.content p { display: block; margin-bottom: 16px; }
+.content button {
+    min-width: 130px;
+    height: 44px;
+    margin: 4px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--button);
+    font-size: medium;
+}
+.leaderboard { border-collapse: collapse; margin: 0 auto 16px; }
+.leaderboard th,
+.leaderboard td {
+    padding: 6px 16px;
     border-bottom: 1px solid var(--shadow-dark);
 }
