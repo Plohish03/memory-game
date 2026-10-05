@@ -18,7 +18,7 @@ const pairsEl = createEl('span', '', 'Пары: 0 из 8');
 const board = createEl('div', 'board');
 const newGameBtn = createEl('button', '', 'Новая игра');
 const leaderboardBtn = createEl('button', '', 'Таблица лидеров');
-
+const STORAGE_KEY = 'memory-results';
 
 header.append(newGameBtn);
 header.append(leaderboardBtn);
@@ -84,6 +84,7 @@ function renderBoard(){
                 pairs++;
                 pairsEl.textContent = 'Пары: ' + pairs + ' из 8';
                 if(pairs ===8){
+                    saveResult(moves);
                     showWinModal();
                 }
 
@@ -177,20 +178,13 @@ function closeModal(){
 }
 
 leaderboardBtn.addEventListener('click', function () {
-
-    const content = createEl('div', '', 'Тест');
-    const closeBtn = createEl('button', '', 'Закрыть');
-    closeBtn.addEventListener('click', function () {
-        closeModal();
-    });
-    content.append(closeBtn);
-    openModal(content);
+    showLeaderboard();
 });
 
 function showWinModal(){
     const content = createEl('div', 'content', '');
     const closeBtn = createEl('button', '', 'Закрыть');
-    const winNewGameBtn = createEl('button', '', 'Новая игра!');
+    const winNewGameBtn = createEl('button', '', 'Новая игра');
     closeBtn.addEventListener('click', function () {
         closeModal();
     });
@@ -203,6 +197,79 @@ function showWinModal(){
     content.append(createEl('span', '', 'Ходов: ' + moves));
     content.append(winNewGameBtn);
     content.append(closeBtn);
+    openModal(content);
+}
+
+
+function loadResults() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw === null){
+        return [];
+    }else{
+        try {
+            return JSON.parse(raw)
+        } catch (e) {
+            return [];
+        }
+    }
+}
+
+function saveResult(movesCount) {
+    let results = loadResults();
+    results.push({ moves: movesCount, date: Date.now() });
+    results.sort(function (a, b) {
+    if(a.moves !== b.moves){
+        return a.moves - b.moves;
+    }else{
+        return a.date - b.date;
+    }
+    });
+
+    results = results.slice(0, 10);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+}
+
+function formatDate(timestamp) {
+    const d = new Date(timestamp);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return day + '.' + month + '.' + year;
+}
+
+function showLeaderboard() {
+    const results = loadResults();
+    const content = createEl('div', 'content');
+    content.append(createEl('h2', '', 'Таблица лидеров'));
+
+    if (results.length === 0) {
+        content.append(createEl('p', '', 'Пока нет результатов'));
+    } else {
+        const table = createEl('table', 'leaderboard');
+
+        const headRow = createEl('tr');
+        headRow.append(createEl('th', '', 'Место'));
+        headRow.append(createEl('th', '', 'Ходы'));
+        headRow.append(createEl('th', '', 'Дата'));
+        table.append(headRow);
+
+        for (let i = 0; i < results.length; i++) {
+            const row = createEl('tr');
+            row.append(createEl('td', '', String(i + 1)));
+            row.append(createEl('td', '', String(results[i].moves)));
+            row.append(createEl('td', '', formatDate(results[i].date)));
+            table.append(row);
+        }
+
+        content.append(table);
+    }
+
+    const closeBtn = createEl('button', '', 'Закрыть');
+    closeBtn.addEventListener('click', function () {
+        closeModal();
+    });
+    content.append(closeBtn);
+
     openModal(content);
 }
 

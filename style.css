@@ -90,5 +90,14 @@ body {
     border-radius: 10px;
     margin: 20px;
     padding: 20px;
-    
+
+}
+.leaderboard {
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+.leaderboard th, .leaderboard td {
+    padding: 6px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--shadow-dark);
 }
